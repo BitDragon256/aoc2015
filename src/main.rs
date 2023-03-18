@@ -6,7 +6,8 @@ fn main() {
     //day01();
     //day02();
     //day03();
-    day04();
+    //day04();
+    day05();
 }
 fn read_file(path: &str) -> String {
     fs::read_to_string(path).expect("Unable to read file")
@@ -163,37 +164,56 @@ fn day05() {
         .map(|s| s.to_string())
         .collect();
 
-    fn part1(input: &Vec<String>) -> i32 {
-        let mut count = 0;
+    fn part1(input: &Vec<String>) -> usize {
         
-        input
+        let double_letter = Regex::new(r"aa|bb|cc|dd|ee|ff|gg|hh|ii|jj|kk|ll|mm|nn|oo|pp|qq|rr|ss|tt|uu|vv|ww|xx|yy|zz").unwrap();
+        let vocals = Regex::new(r"[aeiou]+.*[aeiou]+.*[aeiou]").unwrap();
+        let forbidden = Regex::new(r"(ab|cd|pq|xy)").unwrap();
+
+        let count = input
             .iter()
-            .map(|line| line.find());
+            .fold(0, |acc, line| if double_letter.is_match(line) && vocals.is_match(line) && !forbidden.is_match(line) { acc + 1 } else { acc });
 
         return count;
     }
-    fn part2(input: &Vec<String>) -> i32 {
+    fn part2(input: &Vec<String>) -> usize {
+        let one_letter_repeat = Regex::new(r"a.a|b.b|c.c|d.d|e.e|f.f|g.g|h.h|i.i|j.j|k.k|l.l|m.m|n.n|o.o|p.p|q.q|r.r|s.s|t.t|u.u|v.v|w.w|x.x|y.y|z.z").unwrap();
+        fn two_pairs(line: &String) -> bool {
+            for i in 1..line.len()-2 {
+                for j in i+2..line.len() {
+                    if line[i-1..i+1] == line[j-1..j+1] {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        let count = input
+            .iter()
+            .fold(0, |acc, line| if one_letter_repeat.is_match(line) && two_pairs(line) {acc + 1} else {acc});
+
+        return count;
+    }
+
+    println!("Part 1: {}, Part 2: {}", part1(&input), part2(&input));
+}
+fn day06() {
+    let input: String = include_str!("../6.txt")
+    .lines()
+    .collect();
+
+    fn part1(input: &String) -> usize {
+        
+
         return 0;
     }
-
+    fn part2(input: &String) -> usize {
+        return 0;
+    }
+    
     println!("Part 1: {}, Part 2: {}", part1(&input), part2(&input));
 }
-
 /*
-fn day06() {
-    let input: String = include_str!("../3.txt")
-        .lines()
-        .collect();
-
-    fn part1(input: &String) -> i32 {
-
-    }
-    fn part2(input: &String) -> i32 {
-
-    }
-
-    println!("Part 1: {}, Part 2: {}", part1(&input), part2(&input));
-}
 fn day07() {
     let input: String = include_str!("../3.txt")
         .lines()
